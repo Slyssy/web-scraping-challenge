@@ -17,16 +17,21 @@ def get_html(url, wait):
 
     return html
 
-# headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:82.0) Gecko/20100101 Firefox/82.0"}
 url = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
 html = get_html(url, wait=5)
-print(html)
-# r = requests.get(url, headers=headers)
+
+
 soup = BeautifulSoup(html, "html.parser")
 
-news_titles = soup.find_all("li", class_="slide")
-latest_story = news_titles[0].find("h3").text
-print(latest_story)
+news_titles = soup.find_all("li", class_ = "slide")
+latest_story = news_titles[0]
+# print(latest_story)
+print({
+        "article_title": latest_story.find("h3").text.strip(),
+        "article_p": latest_story.find("div", class_ = "article_teaser_body").text.strip()
+        })
+
+
 # latest_title = news_titles[0]
 # print(latest_title)
 # print(title[0] for title in news_titles)
