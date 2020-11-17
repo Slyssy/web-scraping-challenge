@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+import numpy as np
 import time
 # from selenium import webdriver.common.by import By
 # from selenium import webdriver.support.ui import WebDriverWait
@@ -46,7 +48,7 @@ import time
 #     # driver.implicitly_wait(2)
 #     driver.find_element_by_partial_link_text("more info").click()
 #     driver.find_element_by_class_name("main_image").click()
-
+# return html
 
 #     # driver.close()
 
@@ -73,3 +75,45 @@ import time
 # print(df)
 # html_table = df.to_html(header=False, index=False)
 # print(html_table)
+
+# Mars Hemispheres Starts Here
+# Using loop to get the URLs
+
+fireFoxOptions = webdriver.FirefoxOptions()
+fireFoxOptions.set_headless(False)
+driver = webdriver.Firefox(firefox_options=fireFoxOptions)
+driver.get("https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars")
+links = driver.find_elements_by_partial_link_text("Enhanced")
+
+print("Number of links present:",len(links))
+
+# for link in links:
+link_list = [link.text for link in links]
+print(link_list)
+
+
+
+
+
+# def get_html(url, wait):
+#     fireFoxOptions = webdriver.FirefoxOptions()
+#     fireFoxOptions.set_headless(False)
+#     driver = webdriver.Firefox(firefox_options=fireFoxOptions)
+#     driver.get(url)
+#     driver.implicitly_wait(wait)
+#     driver.find_element_by_partial_link_text("Cerberus").click()
+#     driver.find_element_by_partial_link_text("Open").click()
+#     driver.close()
+    
+#     return html
+
+    
+
+# url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+# html = get_html(url, wait=10)
+
+# soup = BeautifulSoup(html, "html.parser")
+# print({
+#     "cerberus_url": soup.find("img", class_="wide-image")["src"]
+   
+#     })
