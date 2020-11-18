@@ -1,4 +1,5 @@
 import pandas as pd
+import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -76,32 +77,32 @@ soup = BeautifulSoup(page.content, "html.parser")
 tables = soup.find_all("table")
 
 # Converting table to pandas DataFrame
-table = tables[0]
-tab_data = [
-    [cell.text for cell in row.find_all(["th", "td"])] for row in table.find_all("tr")
-]
-df = pd.DataFrame(tab_data)
-print(df)
-html_table = df.to_html(header=False, index=False)
-print(html_table)
+# table = tables[0]
+# tab_data = [
+#     [cell.text for cell in row.find_all(["th", "td"])] for row in table.find_all("tr")
+# ]
+# df = pd.DataFrame(tab_data)
+# print(df)
+# html_table = df.to_html(header=False, index=False)
+# print(html_table)
 
-# Mars Hemispheres Starts Here
-def get_html(url, wait):
-    fireFoxOptions = webdriver.FirefoxOptions()
-    fireFoxOptions.set_headless(False)
-    driver = webdriver.Firefox(firefox_options=fireFoxOptions)
-    driver.get(url)
-    driver.implicitly_wait(wait)
-    # element = wait.until(EC.element_to_be_clickable)
-    driver.find_elements_by_partial_link_text("Enhanced").click()
-    html = driver.page_source
-    driver.close()
-    return html
+# # Mars Hemispheres Starts Here
+# def get_html(url, wait):
+#     fireFoxOptions = webdriver.FirefoxOptions()
+#     fireFoxOptions.set_headless(False)
+#     driver = webdriver.Firefox(firefox_options=fireFoxOptions)
+#     driver.get(url)
+#     driver.implicitly_wait(wait)
+#     # element = wait.until(EC.element_to_be_clickable)
+#     driver.find_elements_by_partial_link_text("Enhanced").click()
+#     html = driver.page_source
+#     driver.close()
+#     return html
 
 
-url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
-html = get_html(url, wait=5)
+# url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+# html = get_html(url, wait=5)
 
-soup = BeautifulSoup(html, "html.parser")
+# soup = BeautifulSoup(html, "html.parser")
 
-print(soup.prettify())
+# print(soup.prettify())
