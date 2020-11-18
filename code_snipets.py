@@ -8,3 +8,13 @@ for link in links:
     soup = BeautifulSoup(driver.page_source, "html.parser")
     urls = [item.get("href") for item in soup.find_all("a")]
     print(urls)
+
+# Snipet to pull images off of a website
+for img in soup.find_all("img"):
+    temp = img.get('src')
+    if temp[:1]=="/":
+        image = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars" + temp
+    else:
+        image = temp
+    
+    print(image)
