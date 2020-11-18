@@ -2,12 +2,13 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 import numpy as np
 import time
 # from selenium import webdriver.common.by import By
 # from selenium import webdriver.support.ui import WebDriverWait
-# from selenium import webdriver.support.import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as EC
 
 # def get_html(url, wait):
 
@@ -38,26 +39,35 @@ import time
 
 # JPL Mars Space Images - Featured Image Starts Here
 
-# def get_html(url, wait):
-#     fireFoxOptions = webdriver.FirefoxOptions()
-#     fireFoxOptions.set_headless(False)
-#     driver = webdriver.Firefox(firefox_options=fireFoxOptions)
-#     driver.get(url)
-#     driver.implicitly_wait(wait)
-#     link = driver.find_element_by_link_text("FULL IMAGE").click()
-#     # driver.implicitly_wait(2)
-#     driver.find_element_by_partial_link_text("more info").click()
-#     driver.find_element_by_class_name("main_image").click()
-# return html
+def get_html(url, wait):
+    fireFoxOptions = webdriver.FirefoxOptions()
+    fireFoxOptions.set_headless(False)
+    driver = webdriver.Firefox(firefox_options=fireFoxOptions)
+    driver.get(url)
+    driver.implicitly_wait(wait)
+    html = driver.page_source
+    link = driver.find_element_by_link_text("FULL IMAGE").click()
+    driver.find_element_by_partial_link_text("more info").click()
+    driver.close()
+    return html
 
-#     # driver.close()
+url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
+html = get_html(url, wait=5)
 
-# url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
-# html = get_html(url, wait=5)
+soup = BeautifulSoup(html, "html.parser")
 
-# soup = BeautifulSoup(html, "html.parser")
+main_image = soup.find_all("img", class_ = "main_image")
+
+src = ""
+for image in main_image:
+    src = image["src"]
+    
+# print (image).text
+
+
+
 # print({
-#     "featured_image_url": soup.find("img", class_ = "shrinkToFit")#.find("img")["src"]
+#     "featured_image_url": soup.find_all("img", class_"main_image").text.strip()
 #     })
     
     # for image in featured_image_url
@@ -79,19 +89,50 @@ import time
 # Mars Hemispheres Starts Here
 # Using loop to get the URLs
 
-fireFoxOptions = webdriver.FirefoxOptions()
-fireFoxOptions.set_headless(False)
-driver = webdriver.Firefox(firefox_options=fireFoxOptions)
-driver.get("https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars")
-links = driver.find_elements_by_partial_link_text("Enhanced")
+# fireFoxOptions = webdriver.FirefoxOptions()
+# fireFoxOptions.set_headless(False)
+# driver = webdriver.Firefox(firefox_options=fireFoxOptions)
+# wait = WebDriverWait(driver, 10)
+# element = wait.until(EC.element_to_be_clickable)
+# driver.get("https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars")
+# links = []
+# link_list = driver.find_elements_by_partial_link_text("Enhanced")
+# for e in link_list:
+#     driver.get(url)
+    
+# print(e.get_attribute('href'))
+# links.append(e.get_attribute("href"))
 
-print("Number of links present:",len(links))
-
-# for link in links:
-link_list = [link.text for link in links]
-print(link_list)
+# image_links = [driver.get(link)for link in links]
+    
+# driver.quit()
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# print([driver.find_elements_by_partial_link_text("{link}") for link in links]).click()
+
+# print([link.text for link in links])
+# print(link_list)
+
+# for link in link_list:
+    # driver.get(link).click()
 
 
 
