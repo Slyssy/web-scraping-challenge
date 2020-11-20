@@ -2,65 +2,66 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-import numpy as np
-import time
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
-def scrape():
-    def get_html(url, wait):
-    fireFoxOptions = webdriver.FirefoxOptions()
-    fireFoxOptions.set_headless()
-    driver = webdriver.Firefox(firefox_options=fireFoxOptions)
-    driver.get(url)
-    driver.implicitly_wait(wait)
-    html = driver.page_source
-    driver.close()
+# Setting up FireFox webdriver
+def configure_firefox_driver():
+    firefox_options = FirefoxOptions()
+    firefox_options.add_argument("--headless")
+    driver = webdriver.Firefox(options = firefox_options)
+       
+    return driver
 
-    return html
+driver = configure_firefox_driver()
+mars_dict = {}
 
-    title, article = mars_news()
-    results = {
-        "title": title
-        "article": article
-
-    }
-    return results
-
-
-
-def mars_news():
-    url = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
-    html = get_html(url, wait=5)
+def scrape(driver):
     
+# Mars News 
+    url = "https://mars.nasa.gov/news/"
+    driver.get(url)
+    driver.implicitly_wait(10)
+    html = driver.page_source
+
+    #Parsing with bs4
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Finding news titles
     news_titles = soup.find_all("li", class_="slide")
-    latest_story = news_titles[0]
-    title = latest_story.find("h3").text.strip()
-    article = latest_story.find(
-            "div", class_="article_teaser_body"
-        ).text.strip()
 
-    return title, article
+    # Grabbing latest news title and adding it to a dict
+    latest_story = news_titles[0].find("div", class_="content_title")
+    mars_dict["news_title"] = latest_story.text.strip()
 
-def jpl_mars_space_images():
-    url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
-    html = get_html(url, wait=10)
+    # Grabbing latest news paragraph text and adding to a dict
+    article = news_titles[0].find("div", class_="article_teaser_body")
+    mars_dict["news_p"] = article.text.strip()
 
+# JPL Mars Space Images - Featured Image Starts Here
+    base_url = "https://www.jpl.nasa.gov"
+    url = base_url + "/spaceimages/?search=&category=Mars"
+
+    driver.get(url)
+    driver.implicitly_wait(10)
+    
+    #Scraping with Selenium
     driver.find_element_by_link_text("FULL IMAGE").click()
     driver.find_element_by_partial_link_text("more info").click()
+    driver.implicitly_wait(10)
+    html = driver.page_source
 
+    #Parsing with bs4
+    soup = BeautifulSoup(html, "html.parser")
     main_image = soup.find_all("img", class_="main_image")
-
+    
+    # Grabbing image src from inside the image class "main image"
     src = ""
     for image in main_image:
         src = image["src"]
 
-    featured_image_url = "https://www.jpl.nasa.gov" + src
+    mars_dict["featured_image_url"] = "https://www.jpl.nasa.gov" + src
 
-    return featured_image_url
-
-def mars_facts():
+# Mars Facts Starts Here
     page = requests.get("https://space-facts.com/mars/")
     soup = BeautifulSoup(page.content, "html.parser")
     tables = soup.find_all("table")
@@ -71,11 +72,37 @@ def mars_facts():
         [cell.text for cell in row.find_all(["th", "td"])] for row in table.find_all("tr")
     ]
     df = pd.DataFrame(tab_data)
-
+    print(df)
     mars_facts_html_table = df.to_html(header=False, index=False)
+    print(mars_facts_html_table)
 
-    return mars_facts_html_table
+# Mars Hemispheres Starts Here
+    url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    firefox_options = FirefoxOptions()
+    firefox_options.add_argument("--headless")
+    driver = webdriver.Firefox(options = firefox_options)
+    driver.get(url)
+    driver.implicitly_wait(10)
 
+    links = driver.find_elements_by_partial_link_text("Enhanced")#.click()
+    link_name_list = [link.text for link in links]
 
+    # Iterating through links by using href attribute
+    hrefs = [link.get_attribute("href") for link in links]
 
+    # Iterating throug hrefs to extract src attribute
+    image_url_list =[]
+    for href in hrefs:
+        driver.get(href)
+        image_src = driver.find_element_by_class_name("wide-image")
+        image_urls = (image_src.get_attribute("src"))
+        # Appending image urls for loop output to a list
+        image_url_list.append(image_urls)
 
+    # Creating a dictionary by combining link_name_list and image_url_list
+    url_dict = dict(zip(link_name_list, image_url_list))
+    
+    return mars_dict
+    driver.close()
+scrape(driver)
+print(mars_dict)
