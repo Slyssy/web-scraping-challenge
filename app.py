@@ -1,4 +1,5 @@
 # from mission_to_mars import scrape
+from mars_scrape import scrape
 from flask import Flask
 
 app = Flask(__name__)
@@ -7,9 +8,9 @@ app = Flask(__name__)
 def main():
     return "The app is up!"
 
-@app.route("/scrape/<query>")
+@app.route("/scrape")
 def scrape_route(query):
-    print(scrape("######"))
+    return(scrape)
 
 
 
