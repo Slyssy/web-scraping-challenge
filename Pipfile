@@ -13,6 +13,7 @@ pandas = "*"
 flask = "*"
 flask-pymongo = "*"
 dnspython = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.9"
