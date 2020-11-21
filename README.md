@@ -1,4 +1,10 @@
 # Web Scraping Flask App
+Outline of Files:
+* Template Folder Holds the HTML file.
+* Images Folder Holds the Screen shot image that is displayed at the bottom of the README File.
+* mission_to_mars.py: this is where I wrote code to perform my original scrapes.
+* mars_scrape.py: this is where I refactored the code from mission_to_mars.py and put all of those scrapes into one function so it could be imported by the app.py file to perform the scrapes.
+* app.py: this is the Flask PyMongo code.
 
 In this project, I created a flask app that scrapes several websites that are loaded with data about Mars.
 
