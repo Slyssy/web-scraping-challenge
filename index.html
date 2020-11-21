@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel = "stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission to Mars</title>
+</head>
+<body>
+    <!-- Page title and button to call for re-scrape to refresh the data -->
+    <div class="container-fluid"> 
+        <div class="row main">
+            <div class="col-lg-6 col-sm-12">
+                <div class="jumbotron text-center">
+                    <h1>Mission to Mars</h1>
+                    <button type="button" class="btn btn-primary" href="/scrape">Scrape New Data</button>
+                </div>
+            </div>
+        </div>
+   
+     
+    
+    <!-- Latest Mars News -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <h3><b>Latest Mars News</b></h3>
+                    <h4>{{mars_dict.news_title}}</h4>
+                    <p>{{mars_dict.news_p}}</p>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+
+    <div class="container-fluid">
+        <!-- Featured Mars Image -->
+        <div class="row">
+            <div class="col-md-8">
+                <h3><b>Latest Mars News</b></h3> 
+                <img src={{mars_dict.featured_image_url}}>
+            </div>
+        </div>
+        <!-- Mars Facts -->
+        <div class="row">
+            <div class="col-md-8">
+                <h3><b>Mars Facts</b></h3> 
+                <table>{{mars_dict.mars_facts}}</table>
+            </div>
+        </div>
+    </div>
+    <!-- Mars Hemispheres -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 col-sm-12">
+                <h3><b>Mars Hemispheres</b></h3>
+                <img src ={{mars_dict.mars_hemispheres}}>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
