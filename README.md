@@ -1,5 +1,5 @@
 # Web Scraping Flask App
-Outline of Files:
+### Repository Table of Contents:
 * Template Folder Holds the HTML file.
 * Images Folder Holds the Screen shot image that is displayed at the bottom of the README File.
 * mission_to_mars.py: this is where I wrote code to perform my original scrapes.
