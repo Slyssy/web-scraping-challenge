@@ -12,6 +12,7 @@ beautifulsoup4 = "*"
 pandas = "*"
 flask = "*"
 flask-pymongo = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.9"
